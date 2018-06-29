@@ -13,12 +13,18 @@ module.exports = function (app) {
                 console.log("User Location", myJson.location);
                 console.log("Candidate Location", req.body.location);
 
+                let validPhoneNo = req.body.phoneNo.match(/\d/g);
+                if(validPhoneNo!=null){
+                    validPhoneNo = validPhoneNo.join("")
+                    console.log('Valid Phone No is '+validPhoneNo);
+                }
+
                 if (!req.body.location && !req.body.phoneNo) {
                     data = {
                         success: false,
                         error: {
                             type: 'no_phone_number_and_no_candidate_location_provided',
-                            info: 'Please specify a phone number [Example: 14158586273] and candidate location'
+                            info: 'Please specify a phone number [Example: 14158586273] and a candidate location'
                         }
                     }
                 }
@@ -27,7 +33,7 @@ module.exports = function (app) {
                         success: false,
                         error: {
                             type: 'no_candidate_location_provided',
-                            info: 'Please specify candidate location'
+                            info: 'Please specify a candidate location'
                         }
                     }
                 }
@@ -36,6 +42,15 @@ module.exports = function (app) {
                         success: false,
                         error: {
                             type: 'no_phone_number_provided',
+                            info: 'Please specify a phone number [Example: 14158586273]'
+                        }
+                    }
+                }
+                else if (validPhoneNo==null){
+                    data = {
+                        success: false,
+                        error: {
+                            type: 'non_numeric_phone_number_provided',
                             info: 'Please specify a phone number [Example: 14158586273]'
                         }
                     }
